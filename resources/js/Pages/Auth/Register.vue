@@ -5,13 +5,28 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+// コントローラーから渡された店舗情報を取得
+defineProps({
+    stores: Array
+});
 
 const form = useForm({
-    name: '',
+    last_name: '',
+    first_name: '',
+    last_name_kana: '',
+    first_name_kana: '',
+    gender: '',
     email: '',
+    phone: '',
+    birthday: '',
+    post_code: '',
+    address: '',
+    store_id: '',
     password: '',
     password_confirmation: '',
-    terms: false,
+    // terms: false,
 });
 
 const submit = () => {
@@ -19,6 +34,7 @@ const submit = () => {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
 </script>
 
 <template>
@@ -26,25 +42,81 @@ const submit = () => {
         <Head title="Register" />
 
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
+            <div class="flex space-x-4">
+                <div class="w-1/2">
+                    <InputLabel for="last_name" value="名字" />
+                    <TextInput
+                        id="last_name"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.last_name"
+                        required
+                        autofocus
+                        autocomplete="last_name"
+                    />
+                    <InputError class="mt-2" :message="form.errors.last_name" />
+                </div>
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+                <div class="w-1/2">
+                    <InputLabel for="first_name" value="名前" />
+                    <TextInput
+                        id="first_name"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.first_name"
+                        required
+                        autocomplete="first_name"
+                    />
+                    <InputError class="mt-2" :message="form.errors.first_name" />
+                </div>
+            </div>
 
-                <InputError class="mt-2" :message="form.errors.name" />
+            <div class="flex space-x-4">
+                <div class="w-1/2">
+                    <InputLabel for="last_name_kana" value="名字カナ" />
+                    <TextInput
+                        id="last_name_kana"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.last_name_kana"
+                        required
+                        autocomplete="last_name_kana"
+                    />
+                    <InputError class="mt-2" :message="form.errors.last_name_kana" />
+                </div>
+
+                <div>
+                    <InputLabel for="first_name_kana" value="名前カナ" />
+                    <TextInput
+                        id="first_name_kana"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="form.first_name_kana"
+                        required
+                        autocomplete="first_name_kana"
+                    />
+                    <InputError class="mt-2" :message="form.errors.first_name_kana" />
+                </div>
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="gender" value="性別" />
+                <select
+                    id="gender"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                    v-model="form.gender"
+                    required
+                >
+                    <option value="" disabled>選択してください</option>
+                    <option value="0">男性</option>
+                    <option value="1">女性</option>
+                    <option value="2">その他</option>
+                </select>
+                <InputError class="mt-2" :message="form.errors.gender" />
+            </div>
 
+            <div class="mt-4">
+                <InputLabel for="email" value="メールアドレス" />
                 <TextInput
                     id="email"
                     type="email"
@@ -53,13 +125,73 @@ const submit = () => {
                     required
                     autocomplete="username"
                 />
-
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="phone" value="連絡先｜電話番号" />
+                <TextInput
+                    id="phone"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.phone"
+                    required
+                    autocomplete="phone"
+                />
+                <InputError class="mt-2" :message="form.errors.phone" />
+            </div>
 
+            <div class="mt-4">
+                <InputLabel for="birthday" value="生年月日" />
+                <TextInput
+                    id="birthday"
+                    type="date"
+                    class="mt-1 block w-full"
+                    v-model="form.birthday"
+                    required
+                />
+                <InputError class="mt-2" :message="form.errors.birthday" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="post_code" value="郵便番号" />
+                <TextInput
+                    id="post_code"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.post_code"
+                    required
+                />
+                <InputError class="mt-2" :message="form.errors.post_code" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="address" value="住所" />
+                <TextInput
+                    id="address"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.address"
+                    required
+                />
+                <InputError class="mt-2" :message="form.errors.address" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="store_id" value="店舗選択" />
+
+                <select id="store_id" v-model="form.store_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    <option value="">店舗を選択してください</option>
+                    <option v-for="store in stores" :key="store.id" :value="store.id">
+                        {{ store.name }}
+                    </option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.store_id" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="password" value="パスワード" />
                 <TextInput
                     id="password"
                     type="password"
@@ -68,13 +200,11 @@ const submit = () => {
                     required
                     autocomplete="new-password"
                 />
-
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
+                <InputLabel for="password_confirmation" value="パスワード（確認）" />
                 <TextInput
                     id="password_confirmation"
                     type="password"
@@ -83,7 +213,6 @@ const submit = () => {
                     required
                     autocomplete="new-password"
                 />
-
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 

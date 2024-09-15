@@ -13,18 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('workers', function (Blueprint $table) {
             $table->ulid('id')->primary()->comment('ID');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->char('store_id', 26)->comment('店舗ID');
             $table->string('last_name')->comment('性');
             $table->string('first_name')->comment('名');
             $table->string('last_name_kana')->comment('性カナ');
             $table->string('first_name_kana')->comment('名カナ');
+            $table->string('mail')->comment('メールアドレス');
             $table->string('phone', 11)->comment('電話番号');
             $table->integer('gender')->comment('性別');
-            $table->date('birthday')->comment('生年月日');
+            $table->dateTime('birthday')->comment('生年月日');
             $table->string('post_code')->comment('郵便番号');
             $table->string('address')->comment('住所');
             $table->dateTime('hire_date')->comment('雇入日');
@@ -33,8 +32,6 @@ return new class extends Migration
             $table->integer('post_number')->comment('役職');
             $table->boolean('license_flg')->default(false)->comment('資格フラグ');
             $table->integer('hourly_pay')->nullable()->comment('時給');
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamp('deleted_at')->nullable()->comment('削除日時');
             $table->string('created_account_id', 26)->comment('作成者ID');
             $table->timestamp('created_at')->useCurrent()->comment('作成日時');
@@ -50,6 +47,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('workers');
     }
 };
