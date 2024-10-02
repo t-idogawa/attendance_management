@@ -51,8 +51,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // 出勤打刻
+    Route::post('/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
+    // 退勤打刻
+    Route::post('/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
 });
 
+// トップ
 Route::get('/top', [AttendanceController::class, 'top'])->name('attendance.top');
 
 require __DIR__.'/auth.php';

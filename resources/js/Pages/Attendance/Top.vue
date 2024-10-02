@@ -3,6 +3,8 @@ import { Link } from '@inertiajs/vue3';
 import { onMounted, reactive, ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import axios from 'axios';
+import { Inertia } from '@inertiajs/inertia';
 
 defineProps({
   statusMessage: ""
@@ -13,7 +15,7 @@ const data = reactive({
   appName: "",
   currentTime: "00:00:00",
   currentDate: "",
-  week: ['（日）', '（月）', '（火）', '（水）', '（木）',  '（金）', '（土）'] 
+  week: ['（日）', '（月）', '（火）', '（水）', '（木）',  '（金）', '（土）'] ,
 });
 
 // 現在時刻を取得
@@ -31,16 +33,26 @@ const updateTime = () => {
   data.currentDate = `${years}年${month}月${date}日${days}`;
 }
 
+/**
+ * 出勤時間を記録
+ */
 const clockIn = () => {
-  
+  Inertia.post(route('attendance.clockIn'));
+  console.log('通過');
+}
+
+/**
+ * 退勤時間を記録
+ */
+const clockOut = () => {
+  Inertia.post(route('attendance.clockOut'));
+  console.log('通過2');
 }
 
 onMounted(() => {
   updateTime();
   setInterval(updateTime, 1000);
 });
-
-
 
 </script>
 
@@ -59,6 +71,7 @@ onMounted(() => {
                     <p class="text-gray-900 text-center font-bold text-6xl">{{ data.currentTime }}</p>
                   </div>
                   <div class="buttons">
+                    <p>isClockedIn: {{ data.isClockedIn }}</p>
                     <button @click="clockIn">出勤</button>
                     <button @click="clockOut">退勤</button>
                     <button @click="breakIn">休憩入</button>
