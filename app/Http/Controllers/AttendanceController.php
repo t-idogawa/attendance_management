@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\AttendanceService;
+use App\Models\User;
+use App\Models\Note;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
@@ -19,7 +21,9 @@ class AttendanceController extends Controller
 
     public function top()
     {
-        return Inertia::render('Attendance/Top');
+        return Inertia::render('Attendance/Top', [
+            'notes' => Note::all()
+        ]);
     }
 
     /**
@@ -77,5 +81,25 @@ class AttendanceController extends Controller
             }
             
         }
+    }
+
+    /**
+     * お知らせ詳細画面へ
+     */
+    public function showNote($id)
+    {
+        return Inertia::render('Attendance/Note', 
+        [
+            'id' => $id,
+            'note' => Note::findOrFail($id)
+        ]);
+    }
+
+    /**
+     * マイページを表示する
+     */
+    public function myPage(User $user)
+    {
+        dd($user);
     }
 }
