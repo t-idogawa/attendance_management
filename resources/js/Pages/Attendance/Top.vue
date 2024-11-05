@@ -5,9 +5,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
 import { Inertia } from '@inertiajs/inertia';
+import NoteList from '@/Components/NoteList.vue';
 
-defineProps({
-  statusMessage: ""
+const props = defineProps({
+  statusMessage: "",
+  notes: Array,
 });
 
 // リアクティブなデータを定義
@@ -17,6 +19,11 @@ const data = reactive({
   currentDate: "",
   week: ['（日）', '（月）', '（火）', '（水）', '（木）',  '（金）', '（土）'] ,
 });
+
+// お知らせデータを格納する空の定数を定義
+const notes = ref([]);
+notes.value = props.notes;
+console.log(props.notes);
 
 // 現在時刻を取得
 const updateTime = () => {
@@ -38,7 +45,6 @@ const updateTime = () => {
  */
 const clockIn = () => {
   Inertia.post(route('attendance.clockIn'));
-  console.log('通過');
 }
 
 /**
@@ -46,7 +52,6 @@ const clockIn = () => {
  */
 const clockOut = () => {
   Inertia.post(route('attendance.clockOut'));
-  console.log('通過2');
 }
 
 onMounted(() => {
@@ -64,21 +69,25 @@ onMounted(() => {
           <h2 class="font-semibold text-xl text-gray-800 leading-tight">勤怠管理TOP</h2>
       </template>
 
-      <div class="py-12 ">
+      <div class="py-4">
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
               <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                   <div class="p-6 text-gray-900 text-center font-bold text-xl">{{ data.currentDate }}<br />
                     <p class="text-gray-900 text-center font-bold text-6xl">{{ data.currentTime }}</p>
                   </div>
-                  <div class="buttons">
-                    <p>isClockedIn: {{ data.isClockedIn }}</p>
-                    <button @click="clockIn">出勤</button>
-                    <button @click="clockOut">退勤</button>
-                    <button @click="breakIn">休憩入</button>
-                    <button @click="breakOut">休憩出</button>
+                  <div class="buttons flex justify-center space-x-5 m-2">
+                      <button @click="clockIn" class="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">出勤</button>
+                      <button @click="clockOut" class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">退勤</button>
+                      <button @click="breakIn" class="bg-yellow-400 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">休憩入</button>
+                      <button @click="breakOut" class="bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">休憩出</button>
                   </div>
               </div>
           </div>
+      </div>
+      <div class="py-2">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <NoteList :notes="notes" />
+        </div>
       </div>
   </AuthenticatedLayout>
 </template>

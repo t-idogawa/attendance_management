@@ -60,5 +60,9 @@ Route::middleware('auth')->group(function () {
 
 // トップ
 Route::get('/top', [AttendanceController::class, 'top'])->name('attendance.top');
+// マイページ
+Route::get('/my-page', [AttendanceController::class, 'myPage'])->name('attendance.myPage');
+// お知らせ詳細
+Route::get('/note/{id}', [AttendanceController::class, 'showNote'])->name('attendance.note');
 
 require __DIR__.'/auth.php';

@@ -23,3 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clockIn');
 // 退勤打刻
 Route::post('/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clockOut');
+// お知らせ取得
+Route::get('/notes-list', [AttendanceController::class, 'getNote'])->name('attendance.noteList');
